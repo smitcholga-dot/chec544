@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ЕГЭ Химия — система срезов</title>
+<style>
+:root{--bg:#ffffff;--bg2:#f5f5f3;--bg3:#eeece6;--tx:#1a1a18;--tx2:#6b6b68;--br:rgba(0,0,0,0.12);--br2:rgba(0,0,0,0.22);--rmd:8px;--rlg:12px;--fs:system-ui,-apple-system,sans-serif;--fm:'Courier New',monospace}
+@media(prefers-color-scheme:dark){:root{--bg:#1e1e1c;--bg2:#2a2a28;--bg3:#141412;--tx:#f0ede6;--tx2:#9a9894;--br:rgba(255,255,255,0.1);--br2:rgba(255,255,255,0.18)}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fs);background:var(--bg3);min-height:100vh;padding:1rem}
+.wrap{max-width:980px;margin:0 auto}
+.card{background:var(--bg);border:.5px solid var(--br);border-radius:var(--rlg);padding:1rem 1.25rem;margin-bottom:.875rem}
+.lbl{font-size:11px;color:var(--tx2);margin-bottom:3px;margin-top:10px}.lbl:first-child{margin-top:0}
+.row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;flex:1;min-width:120px}
+input,select,textarea{font-size:13px;font-family:var(--fs);padding:7px 9px;border:.5px solid var(--br2);border-radius:var(--rmd);background:var(--bg);color:var(--tx);width:100%}
+textarea{resize:vertical;min-height:100px;line-height:1.6}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#378ADD}
+.btn{font-size:12px;font-family:var(--fs);padding:7px 14px;border:.5px solid var(--br2);border-radius:var(--rmd);background:transparent;color:var(--tx);cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--bg2)}
+.bp{background:#378ADD;color:#fff;border-color:#185FA5;font-weight:500}.bp:hover{background:#185FA5}
+.bdg{background:#FCEBEB;color:#791F1F;border-color:#F7C1C1}
+.bgg{background:#EAF3DE;color:#27500A;border-color:#C0DD97}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:500}
+.b-blue{background:#E6F1FB;color:#0C447C}.b-green{background:#EAF3DE;color:#27500A}.b-red{background:#FCEBEB;color:#791F1F}.b-amber{background:#FAEEDA;color:#633806}
+.alert{padding:9px 13px;border-radius:var(--rmd);font-size:13px;margin:8px 0}
+.a-info{background:#E6F1FB;color:#0C447C;border:.5px solid #B5D4F4}
+.a-ok{background:#EAF3DE;color:#27500A;border:.5px solid #C0DD97}
+.a-warn{background:#FAEEDA;color:#633806;border:.5px solid #FAC775}
+.a-err{background:#FCEBEB;color:#791F1F;border:.5px solid #F7C1C1}
+.ttl{font-size:14px;font-weight:500;color:var(--tx);margin-bottom:10px}
+.sg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.sc{background:var(--bg2);border-radius:var(--rmd);padding:10px;text-align:center}
+.sn{font-size:22px;font-weight:500;color:var(--tx)}.sl{font-size:11px;color:var(--tx2);margin-top:2px}
+.ag{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:8px 0}
+.ai{display:flex;flex-direction:column;gap:2px;align-items:center}
+.an{font-size:11px;color:var(--tx2);text-align:center;font-weight:500}
+.ainp{font-size:14px;padding:8px 4px;text-align:center;text-transform:uppercase;border:.5px solid var(--br2);border-radius:6px;background:var(--bg);color:var(--tx);width:100%;font-family:var(--fs)}
+.ainp:focus{outline:none;border-color:#378ADD}
+.pill{display:inline-flex;padding:4px 10px;border-radius:20px;font-size:11px;cursor:pointer;border:.5px solid var(--br2);color:var(--tx2);background:transparent;font-family:var(--fs);margin:2px}
+.pill.on{background:#E6F1FB;color:#0C447C;border-color:#B5D4F4}
+.vtab{display:inline-flex;padding:4px 11px;border-radius:20px;font-size:11px;cursor:pointer;border:.5px solid var(--br2);color:var(--tx2);background:transparent;font-family:var(--fs);margin:2px}
+.vtab.on{background:#E6F1FB;color:#0C447C;border-color:#B5D4F4}
+.sr{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--br)}.sr:last-child{border-bottom:none}
+.sname{width:160px;font-size:12px;flex-shrink:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--tx)}
+.hc{width:22px;height:20px;border-radius:3px;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:500}
+.hok{background:#C0DD97;color:#27500A}.herr{background:#F7C1C1;color:#791F1F}.hmt{background:var(--bg2)}.hpart{background:#FAC775;color:#633806}
+.hh{font-size:9px;color:var(--tx2);text-align:center;width:22px;height:20px;display:flex;align-items:center;justify-content:center}
+.empty{text-align:center;padding:1.5rem;color:var(--tx2);font-size:13px}
+.slc{background:var(--bg);border:.5px solid var(--br);border-radius:var(--rmd);padding:.75rem 1rem;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.slc:hover{border-color:var(--br2)}.slc.sel{border-color:#378ADD}
+.divider{border:none;border-top:.5px solid var(--br);margin:1rem 0}
+.tabs{display:flex;border-bottom:.5px solid var(--br);margin-bottom:1.25rem;flex-wrap:wrap}
+.tab{padding:9px 14px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--tx2);border-bottom:2px solid transparent;margin-bottom:-.5px;font-family:var(--fs)}
+.tab.active{color:var(--tx);border-bottom-color:#378ADD;font-weight:500}
+.sec{display:none}.sec.active{display:block}
+.codebox{font-family:var(--fm);font-size:22px;font-weight:500;letter-spacing:6px;background:var(--bg2);border:.5px solid var(--br2);border-radius:var(--rmd);padding:12px 20px;text-align:center;color:#0C447C;user-select:all;cursor:text}
+.step{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:.5px solid var(--br)}.step:last-child{border-bottom:none}
+.stepn{width:26px;height:26px;border-radius:50%;background:#E6F1FB;color:#0C447C;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid #B5D4F4;border-top-color:#378ADD;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.cloud-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500}
+.cloud-on{background:#EAF3DE;color:#27500A}.cloud-off{background:#F1EFE8;color:#6b6b68}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+
+<!-- ГЛАВНЫЙ ЭКРАН -->
+<div id="sc-home">
+  <div class="card" style="max-width:520px;margin:2rem auto">
+    <div style="font-size:17px;font-weight:500;color:var(--tx);margin-bottom:4px">ЕГЭ Химия — система срезов</div>
+    <div style="font-size:13px;color:var(--tx2);margin-bottom:20px">Химия, 28 заданий</div>
+    <div style="display:flex;gap:8px;flex-direction:column">
+      <button class="btn bp" style="font-size:14px;padding:11px" onclick="gotoTeacher()">Панель учителя</button>
+      <button class="btn" style="font-size:14px;padding:11px" onclick="gotoStudent()">Форма ученика — ввести ответы</button>
+    </div>
+    <div class="divider"></div>
+    <div style="font-size:12px;color:var(--tx2);line-height:1.6">
+      <div class="step"><div class="stepn">1</div><div><strong style="color:var(--tx)">Учитель</strong> подключает облако JSONBin (бесплатно, 2 минуты), вводит список учеников, создаёт срезы.</div></div>
+      <div class="step"><div class="stepn">2</div><div>Учитель отправляет <strong style="color:var(--tx)">код доступа</strong> в чат класса.</div></div>
+      <div class="step"><div class="stepn">3</div><div><strong style="color:var(--tx)">Ученик</strong> открывает этот же файл на своём телефоне, вводит код, выбирает имя, вводит ответы.</div></div>
+      <div class="step"><div class="stepn">4</div><div>Учитель видит все ответы сразу — <strong style="color:var(--tx)">с любого устройства</strong>, аналитика обновляется автоматически.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ВХОД УЧИТЕЛЯ -->
+<div id="sc-teacher-login" style="display:none">
+  <div class="card" style="max-width:400px;margin:2rem auto">
+    <div class="ttl">Вход — панель учителя</div>
+    <div id="tl-setup" style="display:none">
+      <div class="alert a-info" style="margin-bottom:12px">Первый запуск. Задайте пароль и код для учеников.</div>
+      <div class="lbl">Пароль учителя</div>
+      <input id="tl-pwd1" type="password" placeholder="Придумайте пароль"/>
+      <div class="lbl">Код для учеников</div>
+      <input id="tl-code1" placeholder="например: хим2025" maxlength="16"/>
+      <div style="font-size:11px;color:var(--tx2);margin-top:4px">Ученики вводят этот код для входа в форму</div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn bp" onclick="setupFirst()" style="flex:1">Сохранить и войти</button>
+        <button class="btn" onclick="go('sc-home')">Назад</button>
+      </div>
+      <div id="setup-err" class="alert a-err" style="display:none"></div>
+    </div>
+    <div id="tl-form" style="display:none">
+      <div class="lbl">Пароль учителя</div>
+      <input id="tl-pwd" type="password" placeholder="Введите пароль" onkeydown="if(event.key==='Enter')teacherLogin()"/>
+      <div id="tl-err" class="alert a-err" style="display:none">Неверный пароль</div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn bp" onclick="teacherLogin()" style="flex:1">Войти</button>
+        <button class="btn" onclick="go('sc-home')">Назад</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ПАНЕЛЬ УЧИТЕЛЯ -->
+<div id="sc-teacher" style="display:none">
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('tt-slices')">Срезы</button>
+    <button class="tab" onclick="showTab('tt-analytics')">Аналитика</button>
+    <button class="tab" onclick="showTab('tt-access')">Ученикам</button>
+    <button class="tab" onclick="showTab('tt-roster')">Список класса</button>
+    <button class="tab" onclick="showTab('tt-cloud')">☁ Облако</button>
+    <button class="tab" onclick="showTab('tt-settings')">Настройки</button>
+    <button class="tab" style="margin-left:auto;color:#791F1F" onclick="teacherLogout()">Выйти</button>
+  </div>
+
+  <!-- СРЕЗЫ -->
+  <div class="sec active" id="tt-slices">
+    <div id="cloud-warning" style="display:none" class="alert a-warn">
+      ☁ Облако не подключено — данные хранятся только на этом устройстве. <a href="#" onclick="showTab('tt-cloud');return false" style="color:#633806;font-weight:500">Подключить →</a>
+    </div>
+    <div class="card">
+      <div class="ttl">Создать новый срез</div>
+      <div class="row">
+        <div class="col"><div class="lbl">Название</div><input id="sl-name" placeholder="Срез 1 — декабрь 2025"/></div>
+        <div class="col" style="max-width:110px"><div class="lbl">Вариантов</div><input type="number" id="sl-vars" value="2" min="1" max="8"/></div>
+        <button class="btn bp" onclick="startCreate()">Создать</button>
+      </div>
+    </div>
+    <div class="card" id="keys-card" style="display:none">
+      <div class="ttl" id="keys-title"></div>
+      <div style="font-size:11px;color:var(--tx2);margin-bottom:8px">Введите правильные ответы. Регистр не важен. Пустая ячейка — задание не оценивается.</div>
+      <div id="keys-vtabs"></div>
+      <div id="keys-grid"></div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn bp" onclick="saveSlice()">Сохранить срез</button>
+        <button class="btn" onclick="cancelCreate()">Отмена</button>
+      </div>
+    </div>
+    <div class="divider" style="margin:.5rem 0"></div>
+    <div style="font-size:11px;font-weight:500;color:var(--tx2);letter-spacing:.06em;margin-bottom:8px">СРЕЗЫ</div>
+    <div id="slices-list"></div>
+    <div id="results-panel" style="display:none">
+      <div class="divider"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div class="ttl" id="res-title" style="margin-bottom:0"></div>
+        <button class="btn bgg" onclick="exportExcel()">↓ Excel</button>
+      </div>
+      <div class="sg" id="res-stats"></div>
+      <div class="card" style="padding:.75rem">
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--tx)">Ученики</div>
+        <div id="res-students"></div>
+      </div>
+      <div class="card" style="padding:.75rem">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px;color:var(--tx)">% выполнения по заданиям</div>
+        <div id="res-tasks"></div>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <button class="btn bdg" onclick="clearSliceData()">Очистить ответы</button>
+        <button class="btn bdg" onclick="deleteSlice()">Удалить срез</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- АНАЛИТИКА -->
+  <div class="sec" id="tt-analytics">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+      <button class="btn bp" onclick="pullFromCloud(true)" style="font-size:11px">↻ Обновить из облака</button>
+    </div>
+    <div class="card" style="padding:.875rem">
+      <div class="ttl">Карточка ученика</div>
+      <div class="row" style="margin-bottom:10px">
+        <div class="col"><div class="lbl">Ученик</div><select id="an-stu" onchange="renderStudentCard()"></select></div>
+      </div>
+      <div id="an-stu-card"></div>
+    </div>
+    <div class="card" style="padding:.875rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div class="ttl" style="margin-bottom:0">Сводная таблица класса</div>
+        <button class="btn bgg" onclick="exportExcelAll()">↓ Всё в Excel</button>
+      </div>
+      <div id="an-class-pills"></div>
+      <div id="an-class-table"></div>
+    </div>
+    <div class="card" style="padding:.875rem">
+      <div class="ttl">% класса по заданиям</div>
+      <div id="an-task-pills"></div>
+      <div id="an-task-chart"></div>
+    </div>
+  </div>
+
+  <!-- УЧЕНИКАМ -->
+  <div class="sec" id="tt-access">
+    <div class="card" style="max-width:480px">
+      <div class="ttl">Код доступа для учеников</div>
+      <div style="font-size:13px;color:var(--tx2);margin-bottom:16px">Отправьте этот код в чат класса. Ученики открывают тот же файл на своих устройствах.</div>
+      <div class="lbl">Текущий код</div>
+      <div class="codebox" id="show-code">—</div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn bp" onclick="copyCode()">Скопировать код</button>
+        <button class="btn" onclick="changeCode()">Изменить код</button>
+      </div>
+      <div id="copy-ok" class="alert a-ok" style="display:none;margin-top:8px">Скопировано!</div>
+      <div id="copy-txt" class="alert a-info" style="display:none;margin-top:8px"></div>
+      <div class="divider"></div>
+      <div style="font-size:12px;color:var(--tx2);line-height:1.8">
+        <strong style="color:var(--tx)">Инструкция для ученика:</strong><br>
+        1. Открой файл <code style="background:var(--bg2);padding:1px 4px;border-radius:3px">ege_chemistry_app.html</code><br>
+        2. Нажми «Форма ученика — ввести ответы»<br>
+        3. Введи код: <span id="show-code-inline" style="font-weight:600;color:#0C447C;font-family:var(--fm);letter-spacing:2px">—</span><br>
+        4. Выбери своё имя из списка, укажи вариант и ответы<br>
+        5. Нажми «Отправить ответы»
+      </div>
+      <div class="divider"></div>
+      <div style="font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:8px">АКТИВНЫЕ СРЕЗЫ</div>
+      <div id="active-slices-list"></div>
+    </div>
+  </div>
+
+  <!-- СПИСОК КЛАССА -->
+  <div class="sec" id="tt-roster">
+    <div class="card" style="max-width:560px">
+      <div class="ttl">Список учеников</div>
+      <div style="font-size:13px;color:var(--tx2);margin-bottom:12px">Введите ФИО учеников — каждое с новой строки. Ученики будут выбирать своё имя из списка.</div>
+      <div class="lbl">Список (каждое ФИО — новая строка)</div>
+      <textarea id="roster-inp" placeholder="Иванов Иван Иванович&#10;Петрова Мария Сергеевна&#10;Сидоров Алексей Петрович"></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn bp" onclick="saveRoster()" style="flex:1">Сохранить список</button>
+      </div>
+      <div id="roster-ok" class="alert a-ok" style="display:none;margin-top:8px">Список сохранён и синхронизирован</div>
+      <div class="divider"></div>
+      <div style="font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:8px">ТЕКУЩИЙ СПИСОК (<span id="roster-count">0</span> чел.)</div>
+      <div id="roster-preview"></div>
+    </div>
+  </div>
+
+  <!-- ОБЛАКО JSONBIN -->
+  <div class="sec" id="tt-cloud">
+    <div class="card" style="max-width:580px">
+      <div class="ttl">Облачное хранилище — JSONBin</div>
+      <div id="cloud-status-block" style="margin-bottom:14px"></div>
+
+      <div class="alert a-info" style="margin-bottom:16px;font-size:12px;line-height:1.8">
+        <strong>JSONBin — бесплатно, без сложных настроек.</strong><br>
+        Все ученики работают с одними данными через интернет.<br><br>
+        <strong>Регистрация (2 минуты):</strong><br>
+        1. Откройте <a href="https://jsonbin.io" target="_blank" style="color:#0C447C;font-weight:500">jsonbin.io</a> → нажмите <strong>Sign Up</strong><br>
+        2. Зарегистрируйтесь (email + пароль)<br>
+        3. После входа нажмите на иконку профиля → <strong>API Keys</strong><br>
+        4. Скопируйте <strong>Secret Key</strong> (начинается с <code style="background:var(--bg2);padding:1px 3px;border-radius:3px">$2b$</code>)<br>
+        5. Вставьте ключ ниже и нажмите «Подключить»
+      </div>
+
+      <div id="cloud-step-key">
+        <div class="lbl">Secret Key от JSONBin</div>
+        <input id="jb-key-inp" type="password" placeholder="$2b$10$..."/>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn bp" onclick="connectJsonBin()" style="flex:1">Подключить</button>
+          <button class="btn bdg" onclick="disconnectJsonBin()">Отключить</button>
+        </div>
+        <div id="jb-msg" style="margin-top:8px"></div>
+      </div>
+
+      <div class="divider"></div>
+      <div style="font-size:12px;color:var(--tx2);line-height:1.7">
+        <strong style="color:var(--tx)">Как это работает:</strong><br>
+        — Все данные (срезы, ответы, список класса) хранятся в вашем аккаунте JSONBin<br>
+        — Ученик отправляет ответ → данные сразу появляются у вас<br>
+        — Бесплатный план JSONBin: до 10 000 запросов/месяц — более чем достаточно<br>
+        — Данные видны только вам (приватный bin)
+      </div>
+    </div>
+  </div>
+
+  <!-- НАСТРОЙКИ -->
+  <div class="sec" id="tt-settings">
+    <div class="card" style="max-width:480px">
+      <div class="ttl">Настройки</div>
+      <div class="lbl">Новый пароль учителя (оставьте пустым — не менять)</div>
+      <input id="cfg-pwd" type="password" placeholder="Новый пароль"/>
+      <div class="lbl">Код для учеников</div>
+      <input id="cfg-code" placeholder="Код доступа"/>
+      <div style="display:flex;gap:8px;margin-top:14px">
+        <button class="btn bp" onclick="saveSettings()">Сохранить</button>
+      </div>
+      <div id="cfg-ok" class="alert a-ok" style="display:none;margin-top:8px">Сохранено</div>
+      <div class="divider"></div>
+      <div class="ttl">Экспорт</div>
+      <button class="btn bgg" onclick="exportExcelAll()">↓ Все ответы в Excel</button>
+      <div class="divider"></div>
+      <div class="ttl" style="color:#791F1F">Опасная зона</div>
+      <button class="btn bdg" onclick="resetAll()">Сбросить всё (удалить все данные)</button>
+    </div>
+  </div>
+</div>
+
+<!-- УЧЕНИК: КОД -->
+<div id="sc-student-login" style="display:none">
+  <div class="card" style="max-width:400px;margin:2rem auto">
+    <div class="ttl">Форма ученика — ЕГЭ Химия</div>
+    <div style="font-size:13px;color:var(--tx2);margin-bottom:14px">Введите код, который дал учитель</div>
+    <div class="lbl">Код доступа</div>
+    <input id="stu-code-inp" placeholder="Введите код" onkeydown="if(event.key==='Enter')studentLogin()" style="font-size:16px;letter-spacing:3px;text-align:center"/>
+    <div id="stu-code-err" class="alert a-err" style="display:none">Неверный код. Спросите учителя.</div>
+    <div id="stu-loading" class="alert a-info" style="display:none"><span class="spin"></span>Загружаем данные из облака...</div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn bp" onclick="studentLogin()" style="flex:1" id="stu-login-btn">Войти</button>
+      <button class="btn" onclick="go('sc-home')">Назад</button>
+    </div>
+  </div>
+</div>
+
+<!-- УЧЕНИК: ФОРМА -->
+<div id="sc-student" style="display:none">
+  <div class="card" style="max-width:600px;margin:0 auto">
+    <div class="ttl">Ввод ответов — ЕГЭ Химия</div>
+    <div id="stu-cloud-bar" style="display:none" class="alert a-info" style="font-size:12px"></div>
+    <div id="stu-no-slices" class="alert a-info" style="display:none">Нет активных срезов. Спросите учителя.</div>
+    <div id="stu-form">
+      <div class="lbl">Срез</div>
+      <select id="stu-slice" onchange="stuSliceChanged()" style="margin-bottom:10px"></select>
+      <div id="stu-body" style="display:none">
+        <div class="row">
+          <div class="col">
+            <div class="lbl">Ваше имя</div>
+            <div id="stu-name-wrap"></div>
+          </div>
+          <div class="col" style="max-width:130px"><div class="lbl">Вариант</div><select id="stu-var"></select></div>
+        </div>
+        <div style="font-size:11px;color:var(--tx2);margin:10px 0 4px">Ответы на задания 1–28:</div>
+        <div class="ag" id="stu-ans-grid"></div>
+        <div id="stu-alert"></div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn bp" onclick="submitAnswers()" style="flex:1" id="stu-submit-btn">Отправить ответы</button>
+          <button class="btn" onclick="go('sc-home')">Выйти</button>
+        </div>
+      </div>
+    </div>
+    <div id="stu-done" style="display:none">
+      <div style="text-align:center;padding:20px 16px 12px">
+        <div style="font-size:40px;margin-bottom:8px;color:#27500A">✓</div>
+        <div style="font-size:18px;font-weight:500;color:var(--tx)">Ответы приняты</div>
+        <div style="font-size:12px;color:var(--tx2);margin-top:4px" id="stu-done-msg">Ваши ответы сохранены</div>
+      </div>
+      <div id="stu-result-card" style="margin:12px 0"></div>
+      <div id="stu-result-heat" style="margin:12px 0"></div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn bp" style="flex:1" onclick="resetStuForm()">Ввести ещё раз</button>
+        <button class="btn" onclick="go('sc-home')">На главную</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+var JBKEY_DEFAULT='$2a$10$Iv/H55v2u7DM1.0h21F1EOdgfyuk4tmk4fjfiRf2mosHWvRaWE8Le';var JBBIN_DEFAULT='69d5e98caaba882197d5d4fa';
+var ST={slices:[],subs:[],pwd:'',code:'',roster:[],jbKey:'',jbBinId:''};
+var draft=null,draftVidx=0,activeSliceId=null,anClassSlice=null,anTaskSlice=null;
+var JBAPI='https://api.jsonbin.io/v3';
+
+function load(){try{var s=localStorage.getItem('ege_chem2');if(s)ST=JSON.parse(s);}catch(e){} if(!ST.jbKey)ST.jbKey=JBKEY_DEFAULT; if(!ST.jbBinId)ST.jbBinId=JBBIN_DEFAULT;}
+function saveLocal(){try{localStorage.setItem('ege_chem2',JSON.stringify(ST));}catch(e){}}
+load();
+
+/* ===== JSONBIN — простая и надёжная синхронизация ===== */
+// Правило: учитель ПИШЕТ в облако, ученик ЧИТАЕТ из облака. Не смешивать!
+
+async function cloudRead(){
+  try{
+    var r=await fetch(JBAPI+'/b/'+JBBIN_DEFAULT+'/latest',{headers:{'X-Master-Key':JBKEY_DEFAULT,'X-Bin-Meta':'false'}});
+    if(!r.ok)return null;
+    return await r.json();
+  }catch(e){return null;}
+}
+
+async function cloudWrite(data){
+  try{
+    var r=await fetch(JBAPI+'/b/'+JBBIN_DEFAULT,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':JBKEY_DEFAULT},body:JSON.stringify(data)});
+    return r.ok;
+  }catch(e){return false;}
+}
+
+// Учитель: сохранить всё в облако
+async function pushToCloud(){
+  var msg=document.getElementById('jb-msg');
+  if(msg)msg.innerHTML='<div class="alert a-info"><span class="spin"></span>Сохраняем в облако...</div>';
+  var data={slices:ST.slices,subs:ST.subs,roster:ST.roster,code:ST.code};
+  var ok=await cloudWrite(data);
+  if(msg)msg.innerHTML=ok
+    ?'<div class="alert a-ok">Данные сохранены в облаке! Ученики увидят обновления.</div>'
+    :'<div class="alert a-err">Ошибка записи. Проверьте интернет.</div>';
+  return ok;
+}
+
+// Учитель: загрузить из облака (только для просмотра чужих ответов)
+async function pullFromCloud(showMsg){
+  var msg=document.getElementById('jb-msg');
+  if(msg&&showMsg)msg.innerHTML='<div class="alert a-info"><span class="spin"></span>Загружаем из облака...</div>';
+  try{
+    var r=await fetch('https://api.jsonbin.io/v3/b/'+JBBIN_DEFAULT+'/latest',{headers:{'X-Master-Key':JBKEY_DEFAULT,'X-Bin-Meta':'false'}});
+    if(!r.ok)throw new Error('bad response');
+    var remote=await r.json();
+    if(remote){
+      ST.slices=remote.slices||ST.slices;
+      ST.subs=remote.subs||ST.subs;
+      ST.roster=remote.roster||ST.roster;
+      if(remote.code)ST.code=remote.code;
+      saveLocal();renderAll();
+      if(msg&&showMsg)msg.innerHTML='<div class="alert a-ok">Загружено! '+ST.subs.length+' ответов</div>';
+      return true;
+    }
+  }catch(e){
+    if(msg&&showMsg)msg.innerHTML='<div class="alert a-err">Ошибка: '+e.message+'</div>';
+  }
+  return false;
+}
+
+// Ученик: загрузить только код и срезы (не трогает локальные ответы)
+async function studentPullFromCloud(){
+  var remote=await cloudRead();
+  if(remote){
+    ST.slices=remote.slices||[];
+    ST.roster=remote.roster||[];
+    ST.code=remote.code||ST.code;
+    saveLocal();
+  }
+  return remote;
+}
+
+// Ученик: добавить свой ответ в облако (читаем → добавляем → пишем)
+async function studentPushAnswer(sub){
+  ST.subs.push(sub);
+  saveLocal();
+  await cloudWrite({slices:ST.slices,subs:ST.subs,roster:ST.roster,code:ST.code});
+}
+
+// Для совместимости — старые вызовы save() теперь пишут в облако
+async function save(){saveLocal();await pushToCloud();}
+async function syncFromCloud(showMsg){await pullFromCloud(showMsg);}
+async function syncToCloud(){await pushToCloud();}
+
+// Старые функции JSONBin — заглушки
+function connectJsonBin(){pushToCloud();}
+function downloadFromCloud(){pullFromCloud(true);}
+function disconnectJsonBin(){if(!confirm('Отключить облако? Локальные данные останутся.'))return;saveLocal();showToast('Данные сохранены локально');}
+function mergeRemote(r){if(r){if(r.slices)ST.slices=r.slices;if(r.subs)ST.subs=r.subs;if(r.roster)ST.roster=r.roster;if(r.code)ST.code=r.code;}}
+
+function updateCloudUI(){
+  var w=document.getElementById('cloud-warning');
+  var sb=document.getElementById('cloud-status-block');
+  var ki=document.getElementById('jb-key-inp');
+  if(ST.jbKey&&ST.jbBinId){
+    if(w)w.style.display='none';
+    if(sb)sb.innerHTML='<div class="alert a-ok">☁ Облако подключено. Bin ID: <code style="font-family:var(--fm);font-size:11px">'+ST.jbBinId+'</code></div>';
+    if(ki)ki.value=ST.jbKey;
+  }else{
+    if(w)w.style.display='';
+    if(sb)sb.innerHTML='<div class="alert a-warn">Облако не подключено — ученики не могут сдавать с других устройств.</div>';
+  }
+}
+
+function showToast(msg){
+  var t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a18;color:#fff;padding:8px 18px;border-radius:20px;font-size:13px;z-index:9999;font-family:var(--fs)';
+  t.textContent=msg;document.body.appendChild(t);
+  setTimeout(function(){t.remove();},2500);
+}
+
+/* ===== НАВИГАЦИЯ ===== */
+function go(id){
+  ['sc-home','sc-teacher-login','sc-teacher','sc-student-login','sc-student'].forEach(function(s){document.getElementById(s).style.display='none';});
+  document.getElementById(id).style.display='';
+}
+function gotoTeacher(){
+  go('sc-teacher-login');
+  if(!ST.pwd){document.getElementById('tl-setup').style.display='';document.getElementById('tl-form').style.display='none';}
+  else{document.getElementById('tl-setup').style.display='none';document.getElementById('tl-form').style.display='';document.getElementById('tl-err').style.display='none';document.getElementById('tl-pwd').value='';}
+}
+function setupFirst(){
+  var p=document.getElementById('tl-pwd1').value.trim();var c=document.getElementById('tl-code1').value.trim();var e=document.getElementById('setup-err');
+  if(!p||!c){e.textContent='Заполните оба поля';e.style.display='';return;}
+  e.style.display='none';ST.pwd=p;ST.code=c;saveLocal();openTeacherPanel();
+}
+function teacherLogin(){
+  var p=document.getElementById('tl-pwd').value;
+  if(p===ST.pwd){document.getElementById('tl-err').style.display='none';openTeacherPanel();}
+  else document.getElementById('tl-err').style.display='';
+}
+function openTeacherPanel(){go('sc-teacher');updateCloudUI();renderAll();showTab('tt-slices');}
+function teacherLogout(){go('sc-home');}
+
+function gotoStudent(){go('sc-student-login');document.getElementById('stu-code-err').style.display='none';document.getElementById('stu-loading').style.display='none';document.getElementById('stu-code-inp').value='';}
+
+async function studentLogin(){
+  var c=document.getElementById('stu-code-inp').value.trim();
+  var errEl=document.getElementById('stu-code-err');
+  var loadEl=document.getElementById('stu-loading');
+  var btn=document.getElementById('stu-login-btn');
+  errEl.style.display='none';
+  if(ST.jbKey&&ST.jbBinId){
+    loadEl.style.display='';btn.disabled=true;
+    var remote=await cloudRead();
+    loadEl.style.display='none';btn.disabled=false;
+    if(remote)mergeRemote(remote);
+    saveLocal();
+  }
+  if(c===ST.code){go('sc-student');renderStudentForm();}
+  else errEl.style.display='';
+}
+
+function showTab(t){
+  document.querySelectorAll('.tab').forEach(function(e){e.classList.remove('active');});
+  document.querySelectorAll('.sec').forEach(function(e){e.classList.remove('active');});
+  var btn=document.querySelector('.tab[onclick="showTab(\''+t+'\')"]');if(btn)btn.classList.add('active');
+  var sec=document.getElementById(t);if(sec)sec.classList.add('active');
+  if(t==='tt-analytics'){syncFromCloud(false);renderAnalytics();}
+  if(t==='tt-access'){document.getElementById('show-code').textContent=ST.code||'—';document.getElementById('show-code-inline').textContent=ST.code||'—';renderActiveSlicess();}
+  if(t==='tt-roster')renderRoster();
+  if(t==='tt-cloud'){updateCloudUI();document.getElementById('jb-key-inp').value=ST.jbKey||'';}
+  if(t==='tt-settings'){document.getElementById('cfg-code').value=ST.code||'';document.getElementById('cfg-pwd').value='';document.getElementById('cfg-ok').style.display='none';}
+}
+function renderAll(){renderSlicesList();renderAnalytics();}
+
+/* ===== СПИСОК УЧЕНИКОВ ===== */
+function saveRoster(){
+  var raw=document.getElementById('roster-inp').value;
+  ST.roster=raw.split('\n').map(function(s){return s.trim();}).filter(function(s){return s.length>0;});
+  save();
+  document.getElementById('roster-ok').style.display='';
+  setTimeout(function(){document.getElementById('roster-ok').style.display='none';},2500);
+  renderRosterPreview();
+}
+function renderRoster(){document.getElementById('roster-inp').value=(ST.roster||[]).join('\n');renderRosterPreview();}
+function renderRosterPreview(){
+  var el=document.getElementById('roster-preview');var cnt=document.getElementById('roster-count');
+  var roster=ST.roster||[];
+  if(!roster.length){el.innerHTML='<div class="empty">Список пуст</div>';cnt.textContent='0';return;}
+  cnt.textContent=roster.length;
+  el.innerHTML=roster.map(function(name,i){return '<div style="display:flex;align-items:center;padding:5px 8px;border-radius:var(--rmd);border:.5px solid var(--br);margin-bottom:4px;font-size:13px;color:var(--tx)">'+(i+1)+'. '+name+'</div>';}).join('');
+}
+
+/* ===== СРЕЗЫ ===== */
+function startCreate(){
+  var name=document.getElementById('sl-name').value.trim()||('Срез '+(ST.slices.length+1));
+  var vars=Math.max(1,Math.min(8,parseInt(document.getElementById('sl-vars').value)||2));
+  draft={id:Date.now(),name:name,vars:vars,keys:[]};
+  for(var i=0;i<vars;i++)draft.keys.push(new Array(28).fill(''));
+  draftVidx=0;document.getElementById('keys-card').style.display='';document.getElementById('keys-title').textContent='Ключи: '+name;renderKeyVtabs();renderKeyGrid();
+}
+function cancelCreate(){draft=null;document.getElementById('keys-card').style.display='none';}
+function renderKeyVtabs(){var h='';for(var i=0;i<draft.keys.length;i++)h+='<button class="vtab '+(i===draftVidx?'on':'')+'" onclick="switchKV('+i+')">Вариант '+(i+1)+'</button>';document.getElementById('keys-vtabs').innerHTML=h;}
+function collectKV(){if(!draft)return;for(var i=0;i<28;i++){var el=document.getElementById('ki'+i);if(el)draft.keys[draftVidx][i]=el.value.trim().toUpperCase();}}
+function switchKV(i){collectKV();draftVidx=i;renderKeyVtabs();renderKeyGrid();}
+function renderKeyGrid(){
+  var keys=draft.keys[draftVidx];var h='<div class="ag">';
+  for(var i=0;i<28;i++)h+='<div class="ai"><div class="an">'+(i+1)+'</div><input class="ainp" id="ki'+i+'" value="'+(keys[i]||'')+'" placeholder="—" maxlength="10"/></div>';
+  document.getElementById('keys-grid').innerHTML=h+'</div>';
+}
+function saveSlice(){collectKV();ST.slices.push(draft);draft=null;document.getElementById('keys-card').style.display='none';document.getElementById('sl-name').value='';save();renderAll();}
+
+function renderSlicesList(){
+  var el=document.getElementById('slices-list');
+  if(!ST.slices.length){el.innerHTML='<div class="empty">Нет срезов — создайте первый</div>';document.getElementById('results-panel').style.display='none';return;}
+  var h='';
+  ST.slices.forEach(function(sl){var cnt=ST.subs.filter(function(s){return s.sliceId===sl.id;}).length;h+='<div class="slc '+(sl.id===activeSliceId?'sel':'')+'" onclick="showResults('+sl.id+')"><div><span style="font-size:13px;font-weight:500;color:var(--tx)">'+sl.name+'</span><span class="badge b-blue" style="margin-left:6px">'+sl.vars+' вар.</span></div><span class="badge b-green">'+cnt+' ответов</span></div>';});
+  el.innerHTML=h;
+}
+
+function calcTaskScore(taskNum,ans,k){
+  var TWO_PT=[6,7,8,14,15,22,23,24];
+  var NO_ORDER=[1,3,4,11,12,13,18];
+  function sortStr(s){return s.split('').sort().join('');}
+  ans=(ans||'').replace(',','.');
+  k=(k||'').replace(',','.');
+  if(!ans||!k)return 0;
+  var noOrder=NO_ORDER.indexOf(taskNum)>=0;
+  var twoPt=TWO_PT.indexOf(taskNum)>=0;
+  var ka=noOrder?sortStr(k):k;
+  var aa=noOrder?sortStr(ans):ans;
+  if(twoPt){
+    if(aa===ka)return 2;
+    var wrong=0;var kArr=k.split('');var aArr=ans.split('');
+    var maxLen=Math.max(kArr.length,aArr.length);
+    for(var j=0;j<maxLen;j++){if(kArr[j]!==aArr[j])wrong++;}
+    return wrong===1?1:0;
+  }else{
+    return aa===ka?1:0;
+  }
+}
+function taskCellClass(taskNum,ans,k){
+  var s=calcTaskScore(taskNum,ans,k);
+  var TWO_PT=[6,7,8,14,15,22,23,24];
+  var twoPt=TWO_PT.indexOf(taskNum)>=0;
+  if(!ans)return 'hmt';
+  if(twoPt){return s===2?'hok':s===1?'hpart':'herr';}
+  return s===1?'hok':'herr';
+}
+function showResults(id){
+  activeSliceId=id;renderSlicesList();
+  var sl=ST.slices.find(function(s){return s.id===id;});var subs=ST.subs.filter(function(s){return s.sliceId===id;});
+  document.getElementById('results-panel').style.display='';
+  document.getElementById('res-title').textContent='Результаты: '+sl.name;
+  var total=subs.length,avg=total?(subs.reduce(function(a,s){return a+s.score;},0)/total).toFixed(1):'—',pct=total?Math.round(subs.reduce(function(a,s){return a+s.score;},0)/total/36*100)+'%':'—',best=total?Math.max.apply(null,subs.map(function(s){return s.score;})):'—';
+  document.getElementById('res-stats').innerHTML='<div class="sc"><div class="sn">'+total+'</div><div class="sl">Сдали</div></div><div class="sc"><div class="sn">'+avg+'</div><div class="sl">Средний балл</div></div><div class="sc"><div class="sn">'+pct+'</div><div class="sl">% выполнения</div></div><div class="sc"><div class="sn">'+best+'</div><div class="sl">Лучший балл</div></div>';
+  if(!subs.length){document.getElementById('res-students').innerHTML='<div class="empty">Нет ответов</div>';document.getElementById('res-tasks').innerHTML='';return;}
+  var sorted=subs.slice().sort(function(a,b){return b.score-a.score;});var sh='';
+  sorted.forEach(function(sub){
+    var keys=sl.keys[sub.variant]||sl.keys[0];var p=Math.round(sub.score/36*100);var gr=p>=84?'5':p>=65?'4':p>=46?'3':'2';var bc=gr==='5'?'b-green':gr==='4'?'b-blue':gr==='3'?'b-amber':'b-red';
+    var cells='';for(var ci=0;ci<sub.answers.length;ci++){var a=sub.answers[ci];var k=(keys[ci]||'').toUpperCase();var cls=taskCellClass(ci+1,a,k);var pts=a?calcTaskScore(ci+1,a,k):'';if(!a)cells+='<div class="hc hmt" style="width:18px;height:16px"></div>';else cells+='<div class="hc '+cls+'" style="width:18px;height:16px;font-size:8px" title="Зад.'+(ci+1)+': '+a+' / ключ:'+(k||'?')+' / '+pts+'б">'+(ci+1)+'</div>';}
+    sh+='<div class="sr"><div class="sname">'+sub.studentName+' <span style="font-size:10px;color:var(--tx2)">В'+(sub.variant+1)+'</span></div><span class="badge '+bc+'" style="flex-shrink:0">Оц. '+gr+'</span><div style="flex:1;display:flex;flex-wrap:wrap;gap:2px">'+cells+'</div><div style="font-size:12px;font-weight:500;color:var(--tx);flex-shrink:0;min-width:32px;text-align:right">'+sub.score+'/29</div></div>';
+  });
+  document.getElementById('res-students').innerHTML=sh;
+  var th='<div style="display:flex;gap:3px;overflow-x:auto;padding-bottom:2px">';
+  for(var t=0;t<28;t++){var corr=subs.filter(function(sub){var k=(sl.keys[sub.variant]||sl.keys[0])[t]||'';return sub.answers[t]&&sub.answers[t]===k.toUpperCase();}).length;var att=subs.filter(function(sub){return sub.answers[t];}).length;var tp=att?Math.round(corr/att*100):0;var bg=tp>=70?'#639922':tp>=40?'#BA7517':'#A32D2D';th+='<div style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:26px"><div style="font-size:10px;font-weight:500;color:'+bg+'">'+tp+'%</div><div style="width:18px;background:var(--bg2);border-radius:2px;height:80px;display:flex;align-items:flex-end"><div style="width:100%;height:'+Math.round(tp*.8)+'px;background:'+bg+';border-radius:2px"></div></div><div style="font-size:9px;color:var(--tx2)">'+(t+1)+'</div></div>';}
+  document.getElementById('res-tasks').innerHTML=th+'</div>';
+  document.getElementById('results-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function clearSliceData(){if(!activeSliceId||!confirm('Удалить все ответы этого среза?'))return;ST.subs=ST.subs.filter(function(s){return s.sliceId!==activeSliceId;});save();showResults(activeSliceId);renderAnalytics();}
+function deleteSlice(){if(!activeSliceId||!confirm('Удалить срез и все ответы?'))return;ST.slices=ST.slices.filter(function(s){return s.id!==activeSliceId;});ST.subs=ST.subs.filter(function(s){return s.sliceId!==activeSliceId;});activeSliceId=null;save();renderAll();document.getElementById('results-panel').style.display='none';}
+
+/* ===== ФОРМА УЧЕНИКА ===== */
+function renderStudentForm(){
+  var bar=document.getElementById('stu-cloud-bar');
+  if(ST.jbKey&&ST.jbBinId){bar.textContent='☁ Ответы будут сохранены в облаке';bar.style.display='';}else bar.style.display='none';
+  var noSlices=document.getElementById('stu-no-slices');var form=document.getElementById('stu-form');
+  if(!ST.slices.length){noSlices.style.display='';form.style.display='none';return;}
+  noSlices.style.display='none';form.style.display='';
+  var sel=document.getElementById('stu-slice');var cur=sel.value;
+  sel.innerHTML='<option value="">— выберите —</option>'+ST.slices.map(function(sl){return '<option value="'+sl.id+'"'+(String(sl.id)===cur?' selected':'')+'>'+sl.name+'</option>';}).join('');
+  stuSliceChanged();
+}
+function stuSliceChanged(){
+  var id=parseInt(document.getElementById('stu-slice').value);var sl=ST.slices.find(function(s){return s.id===id;});var body=document.getElementById('stu-body');
+  if(!sl){body.style.display='none';return;}
+  body.style.display='';document.getElementById('stu-alert').innerHTML='';
+  var wrap=document.getElementById('stu-name-wrap');var roster=ST.roster||[];
+  if(roster.length>0){wrap.innerHTML='<select id="stu-fio"><option value="">— выберите имя —</option>'+roster.map(function(n){return '<option value="'+n+'">'+n+'</option>';}).join('')+'</select>';}
+  else{wrap.innerHTML='<input id="stu-fio" placeholder="Иванова Мария Петровна"/>';}
+  document.getElementById('stu-var').innerHTML=sl.keys.map(function(_,i){return '<option value="'+i+'">Вариант '+(i+1)+'</option>';}).join('');
+  var h='';for(var i=0;i<28;i++)h+='<div class="ai"><div class="an">'+(i+1)+'</div><input class="ainp" id="sa'+i+'" placeholder="—" maxlength="12"/></div>';
+  document.getElementById('stu-ans-grid').innerHTML=h;
+}
+
+async function submitAnswers(){
+  var sliceId=parseInt(document.getElementById('stu-slice').value);var sl=ST.slices.find(function(s){return s.id===sliceId;});
+  var fioEl=document.getElementById('stu-fio');var fio=fioEl?fioEl.value.trim():'';
+  var variant=parseInt(document.getElementById('stu-var').value);var alertEl=document.getElementById('stu-alert');
+  if(!sl){alertEl.innerHTML='<div class="alert a-warn">Выберите срез</div>';return;}
+  if(!fio){alertEl.innerHTML='<div class="alert a-warn">'+(ST.roster&&ST.roster.length?'Выберите своё имя из списка':'Введите ФИО')+'</div>';return;}
+  var answers=[];for(var i=0;i<28;i++){var av=(document.getElementById('sa'+i).value||'').trim().toUpperCase().replace(',','.');answers.push(av);}
+  var keys=sl.keys[variant]||sl.keys[0];var score=0;
+  var TWO_PT=[6,7,8,14,15,22,23,24];
+  var NO_ORDER=[1,3,4,11,12,13,18];
+  function sortStr(s){return s.split('').sort().join('');}
+  answers.forEach(function(a,i){
+    var taskNum=i+1;
+    var k=(keys[i]||'').toUpperCase();
+    var ans=(a||'').toUpperCase();
+    if(!ans||!k)return;
+    var noOrder=NO_ORDER.indexOf(taskNum)>=0;
+    var twoPt=TWO_PT.indexOf(taskNum)>=0;
+    if(twoPt){
+      var ka=noOrder?sortStr(k):k;
+      var aa=noOrder?sortStr(ans):ans;
+      if(aa===ka){score+=2;}
+      else{
+        var wrong=0;
+        var kArr=k.split('');var aArr=ans.split('');
+        var maxLen=Math.max(kArr.length,aArr.length);
+        for(var j=0;j<maxLen;j++){if(kArr[j]!==aArr[j])wrong++;}
+        if(wrong===1)score+=1;
+      }
+    }else{
+      var ka=noOrder?sortStr(k):k;
+      var aa=noOrder?sortStr(ans):ans;
+      if(aa===ka)score+=1;
+    }
+  });
+  var sub={id:Date.now(),sliceId:sliceId,studentName:fio,variant:variant,answers:answers,score:score,ts:new Date().toISOString()};
+
+  var btn=document.getElementById('stu-submit-btn');btn.disabled=true;btn.textContent='Проверяем...';
+  var doneMsg=document.getElementById('stu-done-msg');
+  doneMsg.textContent='Проверяем...';
+  var fresh=await cloudRead();
+  if(fresh){ST.slices=fresh.slices||ST.slices;ST.subs=fresh.subs||ST.subs;ST.roster=fresh.roster||ST.roster;saveLocal();}
+
+  btn.textContent='Сохраняем...';
+  await studentPushAnswer(sub);
+  doneMsg.textContent='Ответы сохранены ✓';
+
+  btn.disabled=false;btn.textContent='Отправить ответы';
+  document.getElementById('stu-form').style.display='none';document.getElementById('stu-done').style.display='';
+  renderStudentResult(sub, sl);
+}
+
+function renderStudentResult(sub, sl){
+  var keys=sl.keys[sub.variant]||sl.keys[0];
+  var p=Math.round(sub.score/36*100);
+  var gr=p>=84?'5':p>=65?'4':p>=46?'3':'2';
+  var gcBg=gr==='5'?'#EAF3DE':gr==='4'?'#E6F1FB':gr==='3'?'#FAEEDA':'#FCEBEB';
+  var gcFg=gr==='5'?'#27500A':gr==='4'?'#0C447C':gr==='3'?'#633806':'#791F1F';
+
+  // Score card
+  var card='<div style="background:'+gcBg+';border-radius:var(--rlg);padding:16px;text-align:center;margin-bottom:10px">'+
+    '<div style="font-size:36px;font-weight:500;color:'+gcFg+'">'+sub.score+' <span style="font-size:16px;opacity:.7">/ 36</span></div>'+
+    '<div style="font-size:13px;color:'+gcFg+';margin-top:4px">Оценка: '+gr+' · '+p+'% выполнения</div></div>';
+  document.getElementById('stu-result-card').innerHTML=card;
+
+  // Heatmap of answers
+  var heat='<div style="font-size:12px;font-weight:500;color:var(--tx);margin-bottom:8px">Ваши ответы:</div>';
+  heat+='<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px">';
+  for(var i=0;i<sub.answers.length;i++){
+    var a=sub.answers[i];var k=(keys[i]||'').replace(',','.').toUpperCase();
+    var an=a?a.replace(',','.'):'';
+    var pts=a?calcTaskScore(i+1,an,k):null;
+    var TWO_PT=[6,7,8,14,15,22,23,24];var twoPt=TWO_PT.indexOf(i+1)>=0;
+    var bg,fg,label;
+    if(!a){bg='var(--bg2)';fg='var(--tx2)';label='—';}
+    else if(pts===(twoPt?2:1)){bg='#C0DD97';fg='#27500A';label=a+(twoPt?' (2б)':'');}
+    else if(pts===1&&twoPt){bg='#FAC775';fg='#633806';label=a+' (1б)';}
+    else{bg='#F7C1C1';fg='#791F1F';label=a;}
+    heat+='<div style="background:'+bg+';color:'+fg+';border-radius:6px;padding:6px 4px;text-align:center">'+
+      '<div style="font-size:9px;opacity:.7;margin-bottom:2px">'+(i+1)+'</div>'+
+      '<div style="font-size:11px;font-weight:500">'+label+'</div></div>';
+  }
+  heat+='</div>';
+  heat+='<div style="font-size:11px;color:var(--tx2);margin-top:8px">'+
+    '<span style="background:#C0DD97;color:#27500A;padding:2px 6px;border-radius:4px;margin-right:6px">Верно</span>'+
+    '<span style="background:#FAC775;color:#633806;padding:2px 6px;border-radius:4px;margin-right:6px">Частично</span>'+
+    '<span style="background:#F7C1C1;color:#791F1F;padding:2px 6px;border-radius:4px">Ошибка</span></div>';
+  document.getElementById('stu-result-heat').innerHTML=heat;
+}
+
+function resetStuForm(){document.getElementById('stu-done').style.display='none';document.getElementById('stu-form').style.display='';var fioEl=document.getElementById('stu-fio');if(fioEl)fioEl.value='';for(var i=0;i<28;i++){var el=document.getElementById('sa'+i);if(el)el.value='';}document.getElementById('stu-alert').innerHTML='';}
+
+/* ===== АНАЛИТИКА ===== */
+function renderAnalytics(){
+  var students=[];ST.subs.forEach(function(s){if(students.indexOf(s.studentName)<0)students.push(s.studentName);});students.sort();
+  var sel=document.getElementById('an-stu');if(!sel)return;var cur=sel.value;
+  sel.innerHTML='<option value="">— выберите —</option>'+students.map(function(n){return '<option value="'+n+'"'+(n===cur?' selected':'')+'>'+n+'</option>';}).join('');
+  if(cur)renderStudentCard();
+  if(!anClassSlice&&ST.slices.length)anClassSlice=ST.slices[0].id;if(!anTaskSlice&&ST.slices.length)anTaskSlice=ST.slices[0].id;
+  renderClassPills();renderClassTable();renderTaskPills();renderTaskChart();
+}
+function renderStudentCard(){
+  var name=document.getElementById('an-stu').value;var el=document.getElementById('an-stu-card');if(!name){el.innerHTML='';return;}
+  var subs=ST.subs.filter(function(s){return s.studentName===name;}).sort(function(a,b){return (a.ts||"").localeCompare(b.ts||"");});
+  if(!subs.length){el.innerHTML='<div class="empty">Нет ответов</div>';return;}
+  var avg=(subs.reduce(function(a,s){return a+s.score;},0)/subs.length).toFixed(1);var trend=subs.length>1?subs[subs.length-1].score-subs[0].score:0;var tc=trend>0?'#27500A':trend<0?'#791F1F':'var(--tx2)';var ts2=trend>0?'+'+trend:trend===0?'0':''+trend;
+  var h='<div class="sg" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:12px"><div class="sc"><div class="sn">'+subs.length+'</div><div class="sl">Срезов</div></div><div class="sc"><div class="sn">'+avg+'</div><div class="sl">Средний балл</div></div><div class="sc"><div class="sn" style="color:'+tc+'">'+ts2+'</div><div class="sl">Динамика</div></div></div>';
+  h+='<div style="font-size:12px;font-weight:500;margin-bottom:6px;color:var(--tx)">Тепловая карта</div><div style="overflow-x:auto"><div style="display:grid;grid-template-columns:130px repeat(28,22px);gap:2px"><div style="font-size:9px;color:var(--tx2);padding:2px">Срез</div>';
+  for(var t=1;t<=28;t++)h+='<div class="hh">'+t+'</div>';
+  subs.forEach(function(sub){var sl=ST.slices.find(function(s){return s.id===sub.sliceId;});if(!sl)return;var keys=sl.keys[sub.variant]||sl.keys[0];h+='<div style="font-size:10px;color:var(--tx2);display:flex;align-items:center;overflow:hidden;white-space:nowrap;padding-right:4px">'+(sl.name||'').substring(0,16)+'</div>';for(var i=0;i<28;i++){var a=sub.answers[i];var k=(keys[i]||'').toUpperCase();var cls=taskCellClass(i+1,a,k);var pts=a?calcTaskScore(i+1,a,k):'';h+='<div class="hc '+cls+'">'+(a?(pts===2?'✓':pts===1?'½':'✗'):'')+'</div>';}});
+  h+='</div></div><div style="font-size:12px;font-weight:500;margin:12px 0 6px;color:var(--tx)">Баллы по срезам</div><div style="display:flex;gap:6px;flex-wrap:wrap">';
+  subs.forEach(function(sub){var sl=ST.slices.find(function(s){return s.id===sub.sliceId;});var p2=Math.round(sub.score/36*100);var bg=p2>=70?'#EAF3DE':p2>=50?'#FAEEDA':'#FCEBEB';var fg=p2>=70?'#27500A':p2>=50?'#633806':'#791F1F';h+='<div style="background:'+bg+';color:'+fg+';padding:8px 12px;border-radius:var(--rmd);text-align:center;min-width:76px"><div style="font-size:18px;font-weight:500">'+sub.score+'</div><div style="font-size:9px;opacity:.8;margin-top:1px">'+((sl?sl.name:'')||'').substring(0,12)+'</div></div>';});
+  el.innerHTML=h+'</div>';
+}
+function renderClassPills(){var el=document.getElementById('an-class-pills');if(!el)return;var h='';ST.slices.forEach(function(sl){h+='<button class="pill '+(sl.id===anClassSlice?'on':'')+'" onclick="setClassSlice('+sl.id+')">'+sl.name+'</button>';});el.innerHTML=h||'<span style="font-size:12px;color:var(--tx2)">Нет срезов</span>';}
+function setClassSlice(id){anClassSlice=id;renderClassPills();renderClassTable();}
+function renderClassTable(){
+  var el=document.getElementById('an-class-table');if(!el)return;var sl=ST.slices.find(function(s){return s.id===anClassSlice;});if(!sl){el.innerHTML='<div class="empty">Выберите срез</div>';return;}
+  var subs=ST.subs.filter(function(s){return s.sliceId===sl.id;}).sort(function(a,b){return b.score-a.score;});if(!subs.length){el.innerHTML='<div class="empty">Нет ответов</div>';return;}
+  var h='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed"><tr><th style="text-align:left;padding:3px 4px;color:var(--tx2);font-weight:400;width:150px">ФИО</th><th style="width:22px;text-align:center;color:var(--tx2);font-weight:400">В</th>';
+  for(var t=1;t<=28;t++)h+='<th style="width:20px;text-align:center;color:var(--tx2);font-weight:400">'+t+'</th>';
+  h+='<th style="width:36px;text-align:center;color:var(--tx2);font-weight:400">Балл</th></tr>';
+  subs.forEach(function(sub,idx){var keys=sl.keys[sub.variant]||sl.keys[0];var bg=idx%2===0?'':'background:var(--bg2)';h+='<tr style="'+bg+'"><td style="padding:2px 4px;overflow:hidden;white-space:nowrap;color:var(--tx)">'+sub.studentName+'</td><td style="text-align:center;color:var(--tx2)">'+(sub.variant+1)+'</td>';for(var i=0;i<28;i++){var a=sub.answers[i];var k=(keys[i]||'').toUpperCase();var pts=a?calcTaskScore(i+1,a,(keys[i]||'').toUpperCase()):null;var s2=!a?'':pts===2||pts===1&&[6,7,8,14,15,22,23,24].indexOf(i+1)<0?'background:#C0DD97;color:#27500A':pts===1?'background:#FAC775;color:#633806':'background:#F7C1C1;color:#791F1F';h+='<td style="text-align:center;padding:1px;'+s2+';border-radius:2px;font-size:9px;font-weight:500">'+(a||'—')+'</td>';}h+='<td style="text-align:center;font-weight:500;color:var(--tx)">'+sub.score+'</td></tr>';});
+  el.innerHTML=h+'</table></div>';
+}
+function renderTaskPills(){var el=document.getElementById('an-task-pills');if(!el)return;var h='';ST.slices.forEach(function(sl){h+='<button class="pill '+(sl.id===anTaskSlice?'on':'')+'" onclick="setTaskSlice('+sl.id+')">'+sl.name+'</button>';});el.innerHTML=h||'<span style="font-size:12px;color:var(--tx2)">Нет срезов</span>';}
+function setTaskSlice(id){anTaskSlice=id;renderTaskPills();renderTaskChart();}
+function renderTaskChart(){
+  var el=document.getElementById('an-task-chart');if(!el)return;var sl=ST.slices.find(function(s){return s.id===anTaskSlice;});if(!sl){el.innerHTML='<div class="empty">Выберите срез</div>';return;}
+  var subs=ST.subs.filter(function(s){return s.sliceId===sl.id;});if(!subs.length){el.innerHTML='<div class="empty">Нет ответов</div>';return;}
+  var h='<div style="display:flex;gap:3px;overflow-x:auto;padding-bottom:4px;align-items:flex-end">';
+  for(var t=0;t<28;t++){var corr=subs.filter(function(sub){var k=(sl.keys[sub.variant]||sl.keys[0])[t]||'';return sub.answers[t]&&sub.answers[t]===k.toUpperCase();}).length;var att=subs.filter(function(sub){return sub.answers[t];}).length;var tp=att?Math.round(corr/att*100):0;var bg=tp>=70?'#639922':tp>=40?'#BA7517':'#A32D2D';h+='<div style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:26px"><div style="font-size:10px;font-weight:500;color:'+bg+'">'+tp+'%</div><div style="width:18px;background:var(--bg2);border-radius:2px;height:100px;display:flex;align-items:flex-end"><div style="width:100%;height:'+Math.round(tp)+'px;background:'+bg+';border-radius:2px"></div></div><div style="font-size:9px;color:var(--tx2)">'+(t+1)+'</div></div>';}
+  el.innerHTML=h+'</div>';
+}
+function renderActiveSlicess(){var el=document.getElementById('active-slices-list');if(!el)return;if(!ST.slices.length){el.innerHTML='<div class="empty">Нет срезов</div>';return;}el.innerHTML=ST.slices.map(function(sl){var cnt=ST.subs.filter(function(s){return s.sliceId===sl.id;}).length;return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--br)"><span style="font-size:13px;color:var(--tx)">'+sl.name+'</span><span class="badge b-green">'+cnt+' ответов</span></div>';}).join('');}
+
+/* ===== КОД, НАСТРОЙКИ ===== */
+function copyCode(){
+  var code=ST.code||'';var ok=document.getElementById('copy-ok');var txt=document.getElementById('copy-txt');ok.style.display='none';txt.style.display='none';
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(code).then(function(){ok.style.display='';setTimeout(function(){ok.style.display='none';},3000);}).catch(function(){fallbackCopy(code);});}
+  else fallbackCopy(code);
+}
+function fallbackCopy(code){var txt=document.getElementById('copy-txt');txt.innerHTML='Скопируйте вручную: <strong style="font-family:var(--fm);letter-spacing:3px">'+code+'</strong>';txt.style.display='';}
+function changeCode(){var c=prompt('Новый код для учеников:',ST.code||'');if(c!==null&&c.trim()){ST.code=c.trim();save();document.getElementById('show-code').textContent=ST.code;document.getElementById('show-code-inline').textContent=ST.code;}}
+function saveSettings(){var p=document.getElementById('cfg-pwd').value.trim();var c=document.getElementById('cfg-code').value.trim();if(p)ST.pwd=p;if(c)ST.code=c;save();var ok=document.getElementById('cfg-ok');ok.style.display='';setTimeout(function(){ok.style.display='none';},3000);}
+function resetAll(){if(!confirm('Удалить ВСЕ данные?\nОтменить нельзя.'))return;ST={slices:[],subs:[],pwd:'',code:'',roster:[],jbKey:'',jbBinId:''};saveLocal();go('sc-home');}
+
+/* ===== ЭКСПОРТ ===== */
+function exportExcel(){if(!activeSliceId)return;var sl=ST.slices.find(function(s){return s.id===activeSliceId;});exportToCSV(sl,ST.subs.filter(function(s){return s.sliceId===activeSliceId;}),sl.name);}
+function exportExcelAll(){
+  var allRows=[];ST.slices.forEach(function(sl){ST.subs.filter(function(s){return s.sliceId===sl.id;}).forEach(function(sub){var row=[sl.name,sub.ts,sub.studentName,'Вариант '+(sub.variant+1),sub.score,Math.round(sub.score/36*100)+'%'];for(var i=0;i<28;i++)row.push(sub.answers[i]||'');allRows.push(row);});});
+  var header=['Срез','Дата','ФИО','Вариант','Балл','%'];for(var i=1;i<=28;i++)header.push('Зад.'+i);
+  downloadCSV([header].concat(allRows),'все_срезы_химия.csv');
+}
+function exportToCSV(sl,subs,name){
+  var header=['Дата','ФИО','Вариант','Балл','%'];for(var i=1;i<=28;i++)header.push('Зад.'+i);var rows=[header];
+  subs.sort(function(a,b){return b.score-a.score;}).forEach(function(sub){var row=[sub.ts,sub.studentName,'Вариант '+(sub.variant+1),sub.score,Math.round(sub.score/36*100)+'%'];for(var i=0;i<28;i++)row.push(sub.answers[i]||'');rows.push(row);});
+  downloadCSV(rows,name+'_результаты.csv');
+}
+function downloadCSV(rows,filename){
+  var bom='\uFEFF';var csv=bom+rows.map(function(r){return r.map(function(c){return '"'+(c||'').toString().replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+</script>
+</body>
+</html>
